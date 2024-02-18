@@ -40,40 +40,7 @@ void KMeans::assignRandomCentroids(std::vector<Point>& dataPoints){
     }
 }
 
-void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration) {
-
-
-    /**
-    if(this->centroids.empty()){
-        //pick k random data points
-
-        std::random_device dev;
-        std::mt19937 rng(dev());
-        std::uniform_int_distribution<std::mt19937::result_type> dist6(0,dataPoints.size()-1);
-
-        //std::vector<Point> centroids;
-        for(int i = 0;i<this->k;++i){
-
-            Point p = dataPoints[dist6(rng)];
-            double  coords[3];
-            for(int j = 0;j<3;++j){
-                coords[j] = p.coords[j];
-
-            }
-            centroids.push_back(Centroid(coords));
-        }
-
-        double a[2] = {2.0,2.0};
-        Centroid p1 = Centroid(a);
-        double b[2] = {3.0,3.0};
-        Centroid p2 = Centroid(b);
-        double c[2] = {4.0,4.0};
-        Centroid p3 = Centroid(c);
-        std::vector<Centroid> centroids = {p1,p2,p3};
-        this->centroids = centroids;
-    }
-    **/
-
+void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition) {
     if(this->centroids.empty()){
         std::cerr << "assign centroids first" << std::endl;
         return;
@@ -99,16 +66,15 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration) {
         for (int i = 0; i < this->k; i++) {
             for (int j = 0; j < dataPoints[0].coords.size(); ++j) {
                 newCentroids[i].coords[j] /= newCentroids[i].cardinality;
-
-                if (std::abs(centroids[i].coords[j] - newCentroids[i].coords[j]) > 1e-5) {
+                if (useStopCondition && std::abs(centroids[i].coords[j] - newCentroids[i].coords[j]) > 1e-15) {
                     converged = false;
                 }
             }
             newCentroids[i].cardinality = 0;
         }
 
-
-        if(converged) {
+        if(useStopCondition && converged) {
+            std::cout << "stopped at iter: ";
             std::cout << _ << std::endl;
             return;
         }

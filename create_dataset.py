@@ -12,7 +12,7 @@ def save_to_csv(x, filename):
     df.to_csv(filename, header=False, index=False)
 
 
-num_samples = 1000
+num_samples = 1000000
 num_features = 3
 num_clusters = 5
 

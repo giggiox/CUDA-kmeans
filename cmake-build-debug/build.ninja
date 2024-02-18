@@ -51,13 +51,19 @@ build cmake_object_order_depends_target_ompkmeans: phony || CMakeFiles/ompkmeans
 
 build CMakeFiles/ompkmeans.dir/main.cpp.o: CXX_COMPILER__ompkmeans_unscanned_Debug /home/luigi/CLionProjects/ompkmeans/main.cpp || cmake_object_order_depends_target_ompkmeans
   DEP_FILE = CMakeFiles/ompkmeans.dir/main.cpp.o.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  FLAGS = -fopenmp -g -std=gnu++17 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles/ompkmeans.dir
   OBJECT_FILE_DIR = CMakeFiles/ompkmeans.dir
 
 build CMakeFiles/ompkmeans.dir/KMeans.cpp.o: CXX_COMPILER__ompkmeans_unscanned_Debug /home/luigi/CLionProjects/ompkmeans/KMeans.cpp || cmake_object_order_depends_target_ompkmeans
   DEP_FILE = CMakeFiles/ompkmeans.dir/KMeans.cpp.o.d
-  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  FLAGS = -fopenmp -g -std=gnu++17 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/ompkmeans.dir
+  OBJECT_FILE_DIR = CMakeFiles/ompkmeans.dir
+
+build CMakeFiles/ompkmeans.dir/utils.cpp.o: CXX_COMPILER__ompkmeans_unscanned_Debug /home/luigi/CLionProjects/ompkmeans/utils.cpp || cmake_object_order_depends_target_ompkmeans
+  DEP_FILE = CMakeFiles/ompkmeans.dir/utils.cpp.o.d
+  FLAGS = -fopenmp -g -std=gnu++17 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles/ompkmeans.dir
   OBJECT_FILE_DIR = CMakeFiles/ompkmeans.dir
 
@@ -69,8 +75,8 @@ build CMakeFiles/ompkmeans.dir/KMeans.cpp.o: CXX_COMPILER__ompkmeans_unscanned_D
 #############################################
 # Link the executable ompkmeans
 
-build ompkmeans: CXX_EXECUTABLE_LINKER__ompkmeans_Debug CMakeFiles/ompkmeans.dir/main.cpp.o CMakeFiles/ompkmeans.dir/KMeans.cpp.o
-  FLAGS = -g
+build ompkmeans: CXX_EXECUTABLE_LINKER__ompkmeans_Debug CMakeFiles/ompkmeans.dir/main.cpp.o CMakeFiles/ompkmeans.dir/KMeans.cpp.o CMakeFiles/ompkmeans.dir/utils.cpp.o
+  FLAGS = -fopenmp -g
   OBJECT_DIR = CMakeFiles/ompkmeans.dir
   POST_BUILD = :
   PRE_LINK = :
