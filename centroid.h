@@ -1,24 +1,23 @@
 //
-// Created by luigi on 31/01/24.
+// Created by luigi on 18/02/24.
 //
 
-#ifndef OMPKMEANS_POINT_H
-#define OMPKMEANS_POINT_H
-
+#ifndef OMPKMEANS_CENTROID_H
+#define OMPKMEANS_CENTROID_H
 #include <array>
 
 #define DIMENSION 2
-struct Point{
+struct Centroid{
     std::array<double, DIMENSION> coords;
-    int clusterLabel;
+    int cardinality;
 
-    Point(): clusterLabel(-1){
+    Centroid(): cardinality(0){
         for(int i = 0;i< DIMENSION; ++i){
             coords[i] = 0.0;
         }
     }
 
-    Point(double* coordinates): clusterLabel(-1){
+    Centroid(double* coordinates): cardinality(0){
         for(int i = 0;i< DIMENSION; ++i){
             coords[i] = coordinates[i];
         }
@@ -27,13 +26,12 @@ struct Point{
     std::string toString(){
         std::string out = "";
         for(int i = 0;i < DIMENSION; ++i){
-                out += std::to_string(coords[i]);
-                out += ",";
+            out += std::to_string(coords[i]);
+            out += ",";
         }
-        out += std::to_string(clusterLabel);
         return out;
     }
 
 };
 
-#endif //OMPKMEANS_POINT_H
+#endif //OMPKMEANS_CENTROID_H

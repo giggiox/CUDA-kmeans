@@ -7,16 +7,18 @@
 
 
 #include "point.h"
+#include "centroid.h"
 #include <vector>
 
 class KMeans {
 private:
     int k;
-    std::vector<Point> centroids;
+
 public:
+    std::vector<Centroid> centroids;
     KMeans(int k);
-    std::vector<Point> fit(std::vector<Point>& dataPoints,int maxIteration);
-    double euclideanNorm(Point& p1,Point& p2);
+    void fit(std::vector<Point>& dataPoints,int maxIteration);
+    static double euclideanNorm(Point& p1,Centroid& p2);
 };
 
 

@@ -6,4 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(ompkmeans main.cpp
         KMeans.cpp
         KMeans.h
-        point.h)
+        point.h
+        centroid.h)
