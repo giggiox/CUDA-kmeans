@@ -6,7 +6,7 @@
 #define OMPKMEANS_CENTROID_H
 #include <array>
 
-#define DIMENSION 2
+#define DIMENSION 3
 struct Centroid{
     std::array<double, DIMENSION> coords;
     int cardinality;

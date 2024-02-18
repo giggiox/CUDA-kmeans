@@ -7,7 +7,7 @@
 
 #include <array>
 
-#define DIMENSION 2
+#define DIMENSION 3
 struct Point{
     std::array<double, DIMENSION> coords;
     int clusterLabel;

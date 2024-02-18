@@ -5,13 +5,13 @@
 
 
 
-std::vector<Point> loadCsv(const std::string& file_name){
+std::vector<Point> loadCsv(const std::string& fileName){
     std::vector<Point> points;
     std::string line;
-    std::ifstream file(file_name);
+    std::ifstream file(fileName);
     std::string word;
     if(!file.is_open()){
-        std::cout << "can't open file" << std::endl;
+        std::cout << "error opening file." << std::endl;
         return points;
     }
     while(getline(file,line)){
@@ -21,31 +21,47 @@ std::vector<Point> loadCsv(const std::string& file_name){
             p.coords[i] = std::stod(word);
             i++;
         }
-        p.clusterLabel = -1;
         points.push_back(p);
     }
     return points;
 }
 
 
+void exportCsv(const std::string& fileName, std::vector<Point>& dataPoints){
+    std::ofstream file(fileName);
+    if (!file.is_open()) {
+        std::cerr << "error opening file." << std::endl;
+        return;
+    }
+    for (const auto& point : dataPoints) {
+        for (const auto& coord : point.coords) {
+            file << coord << ",";
+        }
+        file << point.clusterLabel << "\n";
+    }
+    file.close();
+
+}
+
+
 int main() {
-    std::vector<Point> data = loadCsv("/home/luigi/CLionProjects/ompkmeans/data.csv");
-    /**for(int i = 0;i<data.size();++i){
-        std::cout << data[i].toString() << std::endl;
-    }**/
 
+    std::string cwd = "/home/luigi/CLionProjects/ompkmeans/";
+    std::string dataset = "1000_3_5.csv";
+    std::vector<Point> data = loadCsv(cwd + "dataset/" + dataset);
 
-    KMeans kmean(3);
+    KMeans kmean(5);
+    kmean.assignRandomCentroids(data);
     kmean.fit(data,100);
+
     std::vector<Centroid> centroids = kmean.centroids;
-    for(int i = 0; i< centroids.size();++i){
+
+    exportCsv(cwd + "result/" + dataset,data);
+
+
+    for(int i = 0; i < centroids.size();++i){
         std::cout << centroids[i].toString() << std::endl;
     }
 
-    //double a[2] = {2.0,2.0};
-    //Point p1 = Point(a);
-    //std::cout << p1.coords[0] << std::endl;
-    //std::cout << p1.coords[1] << std::endl;
-    //std::cout << p1.toString() << std::endl;
     return 0;
 }
