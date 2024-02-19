@@ -12,9 +12,11 @@ def save_to_csv(x, filename):
     df.to_csv(filename, header=False, index=False)
 
 
-num_samples = 1000000
-num_features = 3
-num_clusters = 5
 
-x = generate_blob_dataset(num_samples, num_features, num_clusters)
-save_to_csv(x, f"{os.getcwd()}/dataset/{num_samples}_{num_features}_{num_clusters}.csv")
+if __name__ == "__main__":
+    num_samples = 10000
+    num_features = 3
+    num_clusters = 5
+
+    x = generate_blob_dataset(num_samples, num_features, num_clusters)
+    save_to_csv(x, f"{os.getcwd()}/dataset/{num_samples}_{num_features}_{num_clusters}.csv")

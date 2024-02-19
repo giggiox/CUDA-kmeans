@@ -4,11 +4,23 @@
 #include "utils.h"
 #include "KMeans.h"
 #include <omp.h>
+int mainReport(const std::string& dataset){
+    std::vector<Point> data = loadCsv(dataset);
 
-int main() {
+    KMeans kmean(5);
+    kmean.assignRandomCentroids(data);
+    double dt = omp_get_wtime();
+    kmean.fit(data,100, false);
+    dt = omp_get_wtime() - dt;
+    std::cout << dt << std::endl;
 
+    return 0;
+}
+
+int mainTest(){
     std::string cwd = "/home/luigi/CLionProjects/ompkmeans/";
     std::string dataset = "100000_3_5.csv";
+
     std::vector<Point> data = loadCsv(cwd + "dataset/" + dataset);
 
     KMeans kmean(5);
@@ -25,5 +37,23 @@ int main() {
         std::cout << centroids[i].toString() << std::endl;
     }
 
+
+
+
     return 0;
 }
+
+
+
+int main(int argc, char* argv[]) {
+    if(argc == 1) {
+        return mainTest();
+    }else if(argc == 2){
+        return mainReport(argv[1]);
+    }else{
+        std::cerr << "Pass the correct amount of arguments." << std::endl;
+        return 1;
+    }
+}
+
+

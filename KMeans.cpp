@@ -57,7 +57,7 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopC
                     p.clusterLabel = j;
                 }
             }
-            for (int j = 0; j< dataPoints[0].coords.size(); ++j){
+            for (int j = 0; j < dataPoints[0].coords.size(); ++j){
                 newCentroids[p.clusterLabel].coords[j] += p.coords[j];
             }
             newCentroids[p.clusterLabel].cardinality += 1;
