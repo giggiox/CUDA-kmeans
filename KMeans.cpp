@@ -15,30 +15,25 @@ KMeans::KMeans(int k) {
 }
 
 double KMeans::euclideanNorm(Point &p1, Centroid &p2) {
-    double squareSum = 0;
-    int dimension = p1.coords.size();
-    for(int i = 0;i<dimension; ++i){
-        squareSum += (p1.coords[i]-p2.coords[i]) * (p1.coords[i]-p2.coords[i]);
-    }
-    return squareSum;
+    return (p1.x-p2.x) * (p1.x-p2.x) + (p1.y-p2.y) * (p1.y-p2.y) + (p1.z-p2.z) * (p1.z-p2.z);
 }
 
-void KMeans::assignRandomCentroids(std::vector<Point>& dataPoints){
+
+void KMeans::assignRandomCentroids(std::vector<Point> dataPoints){
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist6(0,dataPoints.size()-1);
-
-    //std::vector<Point> centroids;
+    std::vector<Centroid> newCentroids;
     for(int i = 0;i<this->k;++i){
-        Point p = dataPoints[dist6(rng)];
-        int dimension = p.coords.size();
-        double coords[dimension];
-        for(int j = 0;j<dimension;++j){
-            coords[j] = p.coords[j];
-        }
-        this->centroids.push_back(Centroid(coords));
+        int index = dist6(rng);
+        Point p = dataPoints[index];
+        newCentroids.push_back(Centroid(p.x,p.y,p.z));
     }
+    this->centroids = newCentroids;
 }
+
+
+
 
 void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition) {
     if(this->centroids.empty()){
@@ -49,7 +44,7 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopC
     for (int _ = 0; _ < maxIteration;++_) {
         std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
         for (Point& p: dataPoints) {
-            double minDistance = DBL_MAX;
+            double minDistance = INFINITY;
             for (int j = 0; j < this->k; ++j) {
                 double distance = euclideanNorm(p, this->centroids[j]);
                 if (distance < minDistance) {
@@ -57,25 +52,26 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopC
                     p.clusterLabel = j;
                 }
             }
-            for (int j = 0; j < dataPoints[0].coords.size(); ++j){
-                newCentroids[p.clusterLabel].coords[j] += p.coords[j];
-            }
+            newCentroids[p.clusterLabel].x += p.x;
+            newCentroids[p.clusterLabel].y += p.y;
+            newCentroids[p.clusterLabel].z += p.z;
             newCentroids[p.clusterLabel].cardinality += 1;
         }
         bool converged = true;
         for (int i = 0; i < this->k; i++) {
-            for (int j = 0; j < dataPoints[0].coords.size(); ++j) {
-                newCentroids[i].coords[j] /= newCentroids[i].cardinality;
-                if (useStopCondition && std::abs(centroids[i].coords[j] - newCentroids[i].coords[j]) > 1e-15) {
-                    converged = false;
-                }
+            newCentroids[i].x /= newCentroids[i].cardinality;
+            newCentroids[i].y /= newCentroids[i].cardinality;
+            newCentroids[i].z /= newCentroids[i].cardinality;
+            if (useStopCondition && std::abs(centroids[i].x - newCentroids[i].x) > 1e-15
+                && std::abs(centroids[i].y - newCentroids[i].y) > 1e-15
+                && std::abs(centroids[i].z - newCentroids[i].z) > 1e-15) {
+                converged = false;
             }
-            newCentroids[i].cardinality = 0;
         }
 
         if(useStopCondition && converged) {
-            std::cout << "stopped at iter: ";
-            std::cout << _ << std::endl;
+            //std::cout << "stopped at iter: ";
+            //std::cout << _ << std::endl;
             return;
         }
 
@@ -83,3 +79,49 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopC
     }
 }
 
+
+void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition) {
+    if(this->centroids.empty()){
+        std::cerr << "assign centroids first" << std::endl;
+        return;
+    }
+
+    for (int _ = 0; _ < maxIteration;++_) {
+        std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
+#pragma omp parallel for schedule(static) default(none) shared(dataPoints,newCentroids)
+        for (Point& p: dataPoints) {
+            double minDistance = INFINITY;
+            for (int j = 0; j < this->k; ++j) {
+                double distance = euclideanNorm(p, this->centroids[j]);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    p.clusterLabel = j;
+                }
+            }
+            newCentroids[p.clusterLabel].x += p.x;
+            newCentroids[p.clusterLabel].y += p.y;
+            newCentroids[p.clusterLabel].z += p.z;
+            newCentroids[p.clusterLabel].cardinality += 1;
+        }
+        bool converged = true;
+#pragma omp parallel for default(none) shared(newCentroids,converged,useStopCondition)
+        for (int i = 0; i < this->k; i++) {
+            newCentroids[i].x /= newCentroids[i].cardinality;
+            newCentroids[i].y /= newCentroids[i].cardinality;
+            newCentroids[i].z /= newCentroids[i].cardinality;
+            if (useStopCondition && std::abs(centroids[i].x - newCentroids[i].x) > 1e-15
+                && std::abs(centroids[i].y - newCentroids[i].y) > 1e-15
+                && std::abs(centroids[i].z - newCentroids[i].z) > 1e-15) {
+                converged = false;
+            }
+        }
+
+        if(useStopCondition && converged) {
+            //std::cout << "stopped at iter: ";
+            //std::cout << _ << std::endl;
+            return;
+        }
+
+        this->centroids = newCentroids;
+    }
+}

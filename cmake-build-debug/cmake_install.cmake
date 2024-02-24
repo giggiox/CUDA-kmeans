@@ -1,4 +1,4 @@
-# Install script for directory: /home/luigi/CLionProjects/ompkmeans
+# Install script for directory: /home/luigi/CLionProjects/kmeans
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/luigi/CLionProjects/ompkmeans/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/luigi/CLionProjects/kmeans/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

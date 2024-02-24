@@ -3,19 +3,16 @@ import pandas as pd
 import os
 from mpl_toolkits.mplot3d import Axes3D
 
-dataset = "1000_3_5.csv"
-df = pd.read_csv(f"{os.getcwd()}/result/{dataset}", header=None)
-dimension = len(df.iloc[0].values) - 1
-if dimension == 3:
+def show_dataset(dataset_path,is_result=False):
+    df = pd.read_csv(dataset_path, header=None)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-for _, row in df.iterrows():
-    clusterLabel = int(row.iloc[-1])
-    coords = row.iloc[:-1].values
-    num_coords = len(coords)
-    if len(coords) == 2:
-        plt.scatter(coords[0], coords[1], color=f'C{clusterLabel}')
-    elif len(coords) == 3:
-        ax.scatter(coords[0], coords[1], coords[2], color=f'C{clusterLabel}')
+    for _, row in df.iterrows():
+        cluster_label = int(row.iloc[-1])
+        coords = row.iloc[:3].values
+        ax.scatter(coords[0], coords[1], coords[2], color=f'C{cluster_label}')
+    plt.show()
 
-plt.show()
+if __name__ == "__main__":
+    dataset = "1000_5.csv"
+    show_dataset(f"{os.getcwd()}/result/{dataset}",is_result=True)

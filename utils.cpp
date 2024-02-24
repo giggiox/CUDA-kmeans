@@ -3,6 +3,19 @@
 //
 #include "utils.h"
 
+std::vector<std::string> split (const std::string &s, char delim) {
+    std::vector<std::string> result;
+    std::stringstream ss (s);
+    std::string item;
+
+    while (getline (ss, item, delim)) {
+        result.push_back (item);
+    }
+
+    return result;
+}
+
+
 std::vector<Point> loadCsv(const std::string& fileName){
     std::vector<Point> points;
     std::string line;
@@ -13,14 +26,14 @@ std::vector<Point> loadCsv(const std::string& fileName){
         return points;
     }
     while(getline(file,line)){
-        std::stringstream str(line);
-        Point p; int i = 0;
-        while(getline(str, word, ',')){
-            p.coords[i] = std::stod(word);
-            i++;
-        }
+        std::vector<std::string> coords = split(line,',');
+        Point p;
+        p.x = stod(coords[0]);
+        p.y = stod(coords[1]);
+        p.z = stod(coords[2]);
         points.push_back(p);
     }
+    file.close();
     return points;
 }
 
@@ -28,16 +41,12 @@ std::vector<Point> loadCsv(const std::string& fileName){
 void exportCsv(const std::string& fileName, std::vector<Point>& dataPoints){
     std::ofstream file(fileName);
     if (!file.is_open()) {
-        std::cerr << "error opening file." << std::endl;
+        std::cerr << "Error opening file." << std::endl;
         return;
     }
-    for (const auto& point : dataPoints) {
-        for (const auto& coord : point.coords) {
-            file << coord << ",";
-        }
-        file << point.clusterLabel << "\n";
+    for (Point& point : dataPoints) {
+        file << point.toString() << "\n";
     }
     file.close();
 
 }
-

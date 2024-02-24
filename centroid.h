@@ -4,32 +4,23 @@
 
 #ifndef OMPKMEANS_CENTROID_H
 #define OMPKMEANS_CENTROID_H
-#include <array>
 
-#define DIMENSION 3
+#include <sstream>
+
 struct Centroid{
-    std::array<double, DIMENSION> coords;
+    double x,y,z;
     int cardinality;
 
-    Centroid(): cardinality(0){
-        for(int i = 0;i< DIMENSION; ++i){
-            coords[i] = 0.0;
-        }
-    }
+    Centroid(): x(0),y(0),z(0),cardinality(0){}
 
-    Centroid(double* coordinates): cardinality(0){
-        for(int i = 0;i< DIMENSION; ++i){
-            coords[i] = coordinates[i];
-        }
+    Centroid(double nx, double ny, double nz): cardinality(0){
+        x = nx; y = ny; z = nz;
     }
 
     std::string toString(){
-        std::string out = "";
-        for(int i = 0;i < DIMENSION; ++i){
-            out += std::to_string(coords[i]);
-            out += ",";
-        }
-        return out;
+        std::stringstream ss;
+        ss << x << "," << y << "," << z << "," << cardinality;
+        return ss.str();
     }
 
 };

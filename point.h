@@ -4,34 +4,22 @@
 
 #ifndef OMPKMEANS_POINT_H
 #define OMPKMEANS_POINT_H
+#include <sstream>
 
-#include <array>
-
-#define DIMENSION 3
 struct Point{
-    std::array<double, DIMENSION> coords;
+    double x,y,z;
     int clusterLabel;
 
-    Point(): clusterLabel(-1){
-        for(int i = 0;i< DIMENSION; ++i){
-            coords[i] = 0.0;
-        }
-    }
+    Point(): x(0),y(0),z(0),clusterLabel(-1){}
 
-    Point(double* coordinates): clusterLabel(-1){
-        for(int i = 0;i< DIMENSION; ++i){
-            coords[i] = coordinates[i];
-        }
+    Point(double nx, double ny, double nz): clusterLabel(-1){
+        x = nx; y = ny; z = nz;
     }
 
     std::string toString(){
-        std::string out = "";
-        for(int i = 0;i < DIMENSION; ++i){
-                out += std::to_string(coords[i]);
-                out += ",";
-        }
-        out += std::to_string(clusterLabel);
-        return out;
+        std::stringstream ss;
+        ss << x << "," << y << "," << z << "," << clusterLabel;
+        return ss.str();
     }
 
 };
