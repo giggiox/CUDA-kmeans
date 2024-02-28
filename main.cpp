@@ -8,11 +8,14 @@
 
 #define USESTOPCONDITION false
 
-int mainReport(const std::string& dataset){
-    std::vector<Point> data = loadCsv(dataset);
+int mainReport(const std::string& dataset,const std::string& centroidsPath){
+    std::vector<Point> data = loadDataset(dataset);
     KMeans kmean(5);
-    kmean.assignRandomCentroids(data);
-    std::vector<Centroid> centroids = kmean.centroids;
+    std::vector<Centroid> centroids = loadCentroids(centroidsPath);
+
+    kmean.centroids = centroids;
+
+
     double dt = omp_get_wtime();
     kmean.fit(data,100, USESTOPCONDITION);
     dt = omp_get_wtime() - dt;
@@ -28,10 +31,13 @@ int mainReport(const std::string& dataset){
 }
 
 int mainTest(){
+
+    std::cout << omp_get_num_threads() << std::endl;
+
     std::string cwd = "/home/luigi/CLionProjects/kmeans/";
     std::string dataset = "1000_5.csv";
 
-    std::vector<Point> data = loadCsv(cwd + "dataset/" + dataset);
+    std::vector<Point> data = loadDataset(cwd + "dataset/" + dataset);
 
     KMeans kmean(5);
     kmean.assignRandomCentroids(data);
@@ -66,8 +72,8 @@ int mainTest(){
 int main(int argc, char* argv[]) {
     if(argc == 1) {
         return mainTest();
-    }else if(argc == 2){
-        return mainReport(argv[1]);
+    }else if(argc == 3){
+        return mainReport(argv[1],argv[2]);
     }else{
         std::cerr << "Pass the correct amount of arguments." << std::endl;
         return 1;
