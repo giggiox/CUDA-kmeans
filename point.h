@@ -7,12 +7,12 @@
 #include <sstream>
 
 struct Point{
-    double x,y,z;
+    float x,y,z;
     int clusterLabel;
 
     Point(): x(0),y(0),z(0),clusterLabel(-1){}
 
-    Point(double nx, double ny, double nz): clusterLabel(-1){
+    Point(float nx, float ny, float nz): clusterLabel(-1){
         x = nx; y = ny; z = nz;
     }
 

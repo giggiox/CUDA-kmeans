@@ -15,10 +15,11 @@ private:
     int k;
 
 public:
-    std::vector<Centroid> centroids;KMeans(int k);
+    std::vector<Centroid> centroids;
+    KMeans(int k);
     void fit(std::vector<Point>& dataPoints,int maxIteration, bool useStopCondition);
     void fitParallel(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition);
-    static double euclideanNorm(Point& p1,Centroid& p2);
+    static float euclideanNorm(Point& p1,Centroid& p2);
     void assignRandomCentroids(std::vector<Point> dataPoints);
 };
 

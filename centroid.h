@@ -8,12 +8,12 @@
 #include <sstream>
 
 struct Centroid{
-    double x,y,z;
+    float x,y,z;
     int cardinality;
 
     Centroid(): x(0),y(0),z(0),cardinality(0){}
 
-    Centroid(double nx, double ny, double nz): cardinality(0){
+    Centroid(float nx, float ny, float nz): cardinality(0){
         x = nx; y = ny; z = nz;
     }
 

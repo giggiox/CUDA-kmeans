@@ -14,7 +14,7 @@ KMeans::KMeans(int k) {
     this->k = k;
 }
 
-double KMeans::euclideanNorm(Point &p1, Centroid &p2) {
+float KMeans::euclideanNorm(Point &p1, Centroid &p2) {
     return (p1.x-p2.x) * (p1.x-p2.x) + (p1.y-p2.y) * (p1.y-p2.y) + (p1.z-p2.z) * (p1.z-p2.z);
 }
 
@@ -44,9 +44,9 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopC
     for (int _ = 0; _ < maxIteration;++_) {
         std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
         for (Point& p: dataPoints) {
-            double minDistance = INFINITY;
+            float minDistance = INFINITY;
             for (int j = 0; j < this->k; ++j) {
-                double distance = euclideanNorm(p, this->centroids[j]);
+                float distance = euclideanNorm(p, this->centroids[j]);
                 if (distance < minDistance) {
                     minDistance = distance;
                     p.clusterLabel = j;
@@ -88,11 +88,11 @@ void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration, bool 
 
     for (int _ = 0; _ < maxIteration;++_) {
         std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
-#pragma omp parallel for schedule(static) default(none) shared(dataPoints,newCentroids)
+#pragma omp parallel for schedule(static) default(none) shared(dataPoints,newCentroids) num_threads(4)
         for (Point& p: dataPoints) {
-            double minDistance = INFINITY;
+            float minDistance = INFINITY;
             for (int j = 0; j < this->k; ++j) {
-                double distance = euclideanNorm(p, this->centroids[j]);
+                float distance = euclideanNorm(p, this->centroids[j]);
                 if (distance < minDistance) {
                     minDistance = distance;
                     p.clusterLabel = j;
@@ -104,7 +104,7 @@ void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration, bool 
             newCentroids[p.clusterLabel].cardinality += 1;
         }
         bool converged = true;
-#pragma omp parallel for default(none) shared(newCentroids,converged,useStopCondition)
+#pragma omp parallel for default(none) shared(newCentroids,converged,useStopCondition) num_threads(4)
         for (int i = 0; i < this->k; i++) {
             newCentroids[i].x /= newCentroids[i].cardinality;
             newCentroids[i].y /= newCentroids[i].cardinality;
