@@ -29,9 +29,9 @@ std::vector<Point> loadDataset(const std::string& fileName){
     while(getline(file,line)){
         std::vector<std::string> coords = split(line,',');
         Point p;
-        p.x = stod(coords[0]);
-        p.y = stod(coords[1]);
-        p.z = stod(coords[2]);
+        p.x = stof(coords[0]);
+        p.y = stof(coords[1]);
+        p.z = stof(coords[2]);
         points.push_back(p);
     }
     file.close();
