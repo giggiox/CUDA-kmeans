@@ -9,4 +9,5 @@ add_executable(ompkmeans main.cpp
         point.h
         centroid.h
         utils.h
-        utils.cpp)
+        utils.cpp
+        cuda/utils.h)

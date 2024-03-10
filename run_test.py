@@ -6,8 +6,8 @@ import numpy as np
 
 
 
-num_clusters = 5
-samples_test = [100,1000,10000,100000,1000000]
+num_clusters = 500
+samples_test = [1000,10000,100000,1000000,10000000]
 seq_times = []
 par_times = []
 cuda_times = []
@@ -19,7 +19,8 @@ for num_samples in samples_test:
     seq_time = 0
     par_time = 0
     cuda_time = 0
-    for _ in range(10):
+    num_test = 1
+    for _ in range(num_test):
         x = generate_blob_dataset(num_samples, num_clusters)
         save_to_csv(x, filename)
         c = random_centroids(x,num_clusters)
@@ -47,9 +48,9 @@ for num_samples in samples_test:
 
 
 
-    seq_times.append(seq_time/10)
-    par_times.append(par_time/10)
-    cuda_times.append(cuda_time/10)
+    seq_times.append(seq_time/num_test)
+    par_times.append(par_time/num_test)
+    cuda_times.append(cuda_time/num_test)
 
 
 

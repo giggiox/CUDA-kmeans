@@ -1,0 +1,1 @@
+/usr/bin/c++  -fopenmp -O3 -DNDEBUG CMakeFiles/ompkmeans.dir/main.cpp.o CMakeFiles/ompkmeans.dir/KMeans.cpp.o CMakeFiles/ompkmeans.dir/utils.cpp.o -o ompkmeans 

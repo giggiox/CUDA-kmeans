@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="ompkmeans"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/luigi/CLionProjects/kmeans/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ompkmeans">
+				<Option output="/home/luigi/CLionProjects/kmeans/cmake-build-release/ompkmeans" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/luigi/CLionProjects/kmeans/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 ompkmeans"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ompkmeans/fast">
+				<Option output="/home/luigi/CLionProjects/kmeans/cmake-build-release/ompkmeans" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/luigi/CLionProjects/kmeans/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 ompkmeans/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/luigi/CLionProjects/kmeans/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/luigi/CLionProjects/kmeans/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/luigi/CLionProjects/kmeans/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/KMeans.cpp">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/KMeans.h">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/centroid.h">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/cuda/utils.h">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/main.cpp">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/point.h">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/utils.cpp">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/utils.h">
+			<Option target="ompkmeans"/>
+		</Unit>
+		<Unit filename="/home/luigi/CLionProjects/kmeans/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
