@@ -17,7 +17,7 @@ def random_centroids(x,num_clusters):
 
 
 if __name__ == "__main__":
-    num_samples = 300
+    num_samples = 1000
     num_clusters = 5
     show_graph = True
 
