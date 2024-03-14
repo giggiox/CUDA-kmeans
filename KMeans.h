@@ -17,8 +17,8 @@ private:
 public:
     std::vector<Centroid> centroids;
     KMeans(int k);
-    void fit(std::vector<Point>& dataPoints,int maxIteration, bool useStopCondition);
-    void fitParallel(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition);
+    void fit(std::vector<Point>& dataPoints,int maxIteration);
+    void fitParallel(std::vector<Point>& dataPoints, int maxIteration);
     static float euclideanNorm(Point& p1,Centroid& p2);
     void assignRandomCentroids(std::vector<Point> dataPoints);
 };

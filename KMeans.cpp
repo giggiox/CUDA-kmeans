@@ -35,7 +35,7 @@ void KMeans::assignRandomCentroids(std::vector<Point> dataPoints){
 
 
 
-void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition) {
+void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration) {
     if(this->centroids.empty()){
         std::cerr << "assign centroids first" << std::endl;
         return;
@@ -57,71 +57,65 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration, bool useStopC
             newCentroids[p.clusterLabel].z += p.z;
             newCentroids[p.clusterLabel].cardinality += 1;
         }
-        bool converged = true;
         for (int i = 0; i < this->k; i++) {
             newCentroids[i].x /= newCentroids[i].cardinality;
             newCentroids[i].y /= newCentroids[i].cardinality;
             newCentroids[i].z /= newCentroids[i].cardinality;
-            if (useStopCondition && std::abs(centroids[i].x - newCentroids[i].x) > 1e-15
-                && std::abs(centroids[i].y - newCentroids[i].y) > 1e-15
-                && std::abs(centroids[i].z - newCentroids[i].z) > 1e-15) {
-                converged = false;
-            }
         }
-
-        if(useStopCondition && converged) {
-            //std::cout << "stopped at iter: ";
-            //std::cout << _ << std::endl;
-            return;
-        }
-
         this->centroids = newCentroids;
     }
 }
 
 
-void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration, bool useStopCondition) {
+void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration) {
     if(this->centroids.empty()){
         std::cerr << "assign centroids first" << std::endl;
         return;
     }
 
-    for (int _ = 0; _ < maxIteration;++_) {
-        std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
-#pragma omp parallel for schedule(static) default(none) shared(dataPoints,newCentroids) num_threads(4)
-        for (Point& p: dataPoints) {
-            float minDistance = INFINITY;
-            for (int j = 0; j < this->k; ++j) {
-                float distance = euclideanNorm(p, this->centroids[j]);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    p.clusterLabel = j;
+    for (int _ = 0; _ < maxIteration; ++_) {
+            std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
+#pragma omp parallel
+        {
+            std::vector<Centroid> newCentroidsTmp = std::vector<Centroid>(this->k, Centroid());
+#pragma omp for schedule(static)
+            for (int i = 0; i < dataPoints.size(); ++i) {
+                Point &p = dataPoints[i];
+                float minDistance = INFINITY;
+
+                for (int j = 0; j < this->k; ++j) {
+                    float distance = euclideanNorm(p, this->centroids[j]);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        p.clusterLabel = j;
+                    }
                 }
+                newCentroidsTmp[p.clusterLabel].cardinality += 1;
+                newCentroidsTmp[p.clusterLabel].x += dataPoints[i].x;
+                newCentroidsTmp[p.clusterLabel].y += dataPoints[i].y;
+                newCentroidsTmp[p.clusterLabel].z += dataPoints[i].z;
             }
-            newCentroids[p.clusterLabel].x += p.x;
-            newCentroids[p.clusterLabel].y += p.y;
-            newCentroids[p.clusterLabel].z += p.z;
-            newCentroids[p.clusterLabel].cardinality += 1;
+
+            for (int j = 0; j < this->k; ++j) {
+#pragma omp atomic
+                newCentroids[j].cardinality += newCentroidsTmp[j].cardinality;
+#pragma omp atomic
+                newCentroids[j].x += newCentroidsTmp[j].x;
+#pragma omp atomic
+                newCentroids[j].y += newCentroidsTmp[j].y;
+#pragma omp atomic
+                newCentroids[j].z += newCentroidsTmp[j].z;
+            }
+
         }
-        bool converged = true;
-#pragma omp parallel for default(none) shared(newCentroids,converged,useStopCondition) num_threads(4)
-        for (int i = 0; i < this->k; i++) {
+        for (int i = 0; i < this->k; ++i) {
             newCentroids[i].x /= newCentroids[i].cardinality;
             newCentroids[i].y /= newCentroids[i].cardinality;
             newCentroids[i].z /= newCentroids[i].cardinality;
-            if (useStopCondition && std::abs(centroids[i].x - newCentroids[i].x) > 1e-15
-                && std::abs(centroids[i].y - newCentroids[i].y) > 1e-15
-                && std::abs(centroids[i].z - newCentroids[i].z) > 1e-15) {
-                converged = false;
-            }
-        }
-
-        if(useStopCondition && converged) {
-            //std::cout << "stopped at iter: ";
-            //std::cout << _ << std::endl;
-            return;
         }
 
         this->centroids = newCentroids;
     }
 }
+
+

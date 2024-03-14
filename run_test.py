@@ -6,8 +6,8 @@ import numpy as np
 
 
 
-num_clusters = 500
-samples_test = [1000,10000,100000,1000000,10000000]
+num_clusters = 5
+samples_test = [10000,100000,1000000,10000000]
 seq_times = []
 par_times = []
 cuda_times = []
@@ -19,7 +19,7 @@ for num_samples in samples_test:
     seq_time = 0
     par_time = 0
     cuda_time = 0
-    num_test = 1
+    num_test = 5
     for _ in range(num_test):
         x = generate_blob_dataset(num_samples, num_clusters)
         save_to_csv(x, filename)
@@ -44,6 +44,7 @@ for num_samples in samples_test:
         lines = output_str.split("\n")
 
         cuda_time += float(lines[0])
+
 
 
 

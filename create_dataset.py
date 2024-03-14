@@ -17,8 +17,8 @@ def random_centroids(x,num_clusters):
 
 
 if __name__ == "__main__":
-    num_samples = 1000
-    num_clusters = 5
+    num_samples = 10
+    num_clusters = 2
     show_graph = True
 
     x = generate_blob_dataset(num_samples, num_clusters)

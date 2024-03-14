@@ -6,7 +6,6 @@
 #include <omp.h>
 
 
-#define USESTOPCONDITION false
 
 int mainReport(const std::string& dataset,const std::string& centroidsPath){
     std::vector<Point> data = loadDataset(dataset);
@@ -17,13 +16,13 @@ int mainReport(const std::string& dataset,const std::string& centroidsPath){
 
 
     double dt = omp_get_wtime();
-    kmean.fit(data,100, USESTOPCONDITION);
+    kmean.fit(data,100);
     dt = omp_get_wtime() - dt;
     std::cout << dt << std::endl;
 
     kmean.centroids = centroids;
     dt = omp_get_wtime();
-    kmean.fitParallel(data,100, USESTOPCONDITION);
+    kmean.fitParallel(data,100);
     dt = omp_get_wtime() - dt;
     std::cout << dt << std::endl;
 
@@ -35,34 +34,41 @@ int mainTest(){
     std::cout << omp_get_num_threads() << std::endl;
 
     std::string cwd = "/home/luigi/CLionProjects/kmeans/";
-    std::string dataset = "1000_5.csv";
+    std::string dataset = "10000_5.csv";
+    std::string centroidsPath = "10000_5_centroids.csv";
 
     std::vector<Point> data = loadDataset(cwd + "dataset/" + dataset);
+    std::vector<Centroid> centroids = loadCentroids(cwd + "dataset/" + centroidsPath);
 
     KMeans kmean(5);
-    kmean.assignRandomCentroids(data);
+    kmean.centroids = centroids;
 
-    std::cout << "centroid initialization" << std::endl;
+    double dt = omp_get_wtime();
+    kmean.fit(data,100);
+    dt = omp_get_wtime() - dt;
+    std::cout << "time sequential execution: " << dt << std::endl;
 
-    std::cout << "centroids" << std::endl;
-    for(int i = 0;i<kmean.centroids.size();++i){
+
+    std::cout << "found centroids sequential" << std::endl;
+    for(int i = 0; i < kmean.centroids.size();++i){
+        std::cout << kmean.centroids[i].toString() << std::endl;
+    }
+
+
+    kmean.centroids = centroids;
+    dt = omp_get_wtime();
+    kmean.fitParallel(data,100);
+    dt = omp_get_wtime() - dt;
+    std::cout << "time parallel execution: " << dt << std::endl;
+
+
+    std::cout << "found centroids parallel" << std::endl;
+    for(int i = 0; i < kmean.centroids.size();++i){
         std::cout << kmean.centroids[i].toString() << std::endl;
     }
 
 
 
-    double dt = omp_get_wtime();
-    kmean.fit(data,100, false);
-    dt = omp_get_wtime() - dt;
-    std::cout << "time sequential execution: " << dt << std::endl;
-    exportCsv(cwd + "result/" + dataset,data);
-
-
-    std::vector<Centroid> centroids = kmean.centroids;
-    std::cout << "found centroids sequential" << std::endl;
-    for(int i = 0; i < centroids.size();++i){
-        std::cout << centroids[i].toString() << std::endl;
-    }
 
     return 0;
 }
