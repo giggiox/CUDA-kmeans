@@ -12,16 +12,16 @@ seq_times = []
 par_times = []
 cuda_times = []
 
-for num_samples in samples_test:
-    filename = f"{os.getcwd()}/dataset/{num_samples}_{num_clusters}.csv"
-    filename_centroids = f"{os.getcwd()}/dataset/{num_samples}_{num_clusters}_centroids.csv"
+for i in range(len(samples_test)):
+    filename = f"{os.getcwd()}/dataset/{samples_test[i]}_{num_clusters}.csv"
+    filename_centroids = f"{os.getcwd()}/dataset/{samples_test[i]}_{num_clusters}_centroids.csv"
 
     seq_time = 0
     par_time = 0
     cuda_time = 0
-    num_test = 5
+    num_test = 1
     for _ in range(num_test):
-        x = generate_blob_dataset(num_samples, num_clusters)
+        x = generate_blob_dataset(samples_test[i], num_clusters)
         save_to_csv(x, filename)
         c = random_centroids(x,num_clusters)
         save_to_csv(c,filename_centroids)
@@ -44,6 +44,8 @@ for num_samples in samples_test:
         lines = output_str.split("\n")
 
         cuda_time += float(lines[0])
+
+    print(f"done test with {samples_test[i]} points {i+1}/{len(samples_test)}")
 
 
 

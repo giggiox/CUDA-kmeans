@@ -43,28 +43,27 @@ float* loadCsv(const std::string& fileName){
     file.close();
 
     std::ifstream file1(fileName);
-    float *dataPoints = (float*) malloc(sizeof(float)*lineNumber*4);
+    float *dataPoints = (float*) malloc(sizeof(float)*lineNumber*3);
     int i = 0;
     while(getline(file1,line)){
         std::vector<std::string> coords = split(line,',');
         dataPoints[i++] = stof(coords[0]);
         dataPoints[i++] = stof(coords[1]);
         dataPoints[i++] = stof(coords[2]);
-        dataPoints[i++] = 0.0;
     }
     file1.close();
     return dataPoints;
 }
 
 
-void exportCsv(const std::string& fileName, float * dataPoints,int dataPointsLength){
+void exportCsv(const std::string& fileName, float * dataPoints, int * clusterLabel,int dataPointsLength){
     std::ofstream file(fileName);
     if (!file.is_open()) {
         std::cerr << "Error opening file." << std::endl;
         return;
     }
     for (int i = 0;i<dataPointsLength;i++) {
-        file << dataPoints[4*i] << "," << dataPoints[4*i+1] << "," << dataPoints[4*i+2] << "," << dataPoints[4*i+3] << "\n";
+        file << dataPoints[3*i] << "," << dataPoints[3*i+1] << "," << dataPoints[3*i+2] << "," << clusterLabel[i] << "\n";
     }
     file.close();
 
