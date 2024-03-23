@@ -14,8 +14,8 @@ KMeans::KMeans(int k) {
     this->k = k;
 }
 
-float KMeans::euclideanNorm(Point &p1, Centroid &p2) {
-    return (p1.x-p2.x) * (p1.x-p2.x) + (p1.y-p2.y) * (p1.y-p2.y) + (p1.z-p2.z) * (p1.z-p2.z);
+float KMeans::distanceMetric(Point &p1, Centroid &p2) {
+    return (p1.x-p2.x) * (p1.x-p2.x) + (p1.y-p2.y) * (p1.y-p2.y) + (p1.z-p2.z) * (p1.z-p2.z); //squared euclidean distance
 }
 
 
@@ -41,12 +41,12 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration) {
         return;
     }
 
-    for (int _ = 0; _ < maxIteration;++_) {
+    for (int iter = 0; iter < maxIteration;++iter) {
         std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
         for (Point& p: dataPoints) {
             float minDistance = INFINITY;
             for (int j = 0; j < this->k; ++j) {
-                float distance = euclideanNorm(p, this->centroids[j]);
+                float distance = distanceMetric(p, this->centroids[j]);
                 if (distance < minDistance) {
                     minDistance = distance;
                     p.clusterLabel = j;
@@ -67,24 +67,23 @@ void KMeans::fit(std::vector<Point>& dataPoints, int maxIteration) {
 }
 
 
-void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration) {
+void KMeans::fitParallel(std::vector<Point>& dataPoints, int maxIteration, int numthreads = 4) {
     if(this->centroids.empty()){
         std::cerr << "assign centroids first" << std::endl;
         return;
     }
-
-    for (int _ = 0; _ < maxIteration; ++_) {
+    for (int iter = 0; iter < maxIteration; ++iter) {
             std::vector<Centroid> newCentroids = std::vector<Centroid>(this->k, Centroid());
-#pragma omp parallel
+#pragma omp parallel num_threads(numthreads)
         {
             std::vector<Centroid> newCentroidsTmp = std::vector<Centroid>(this->k, Centroid());
-#pragma omp for schedule(static)
+#pragma omp for  schedule(static)
             for (int i = 0; i < dataPoints.size(); ++i) {
                 Point &p = dataPoints[i];
                 float minDistance = INFINITY;
 
                 for (int j = 0; j < this->k; ++j) {
-                    float distance = euclideanNorm(p, this->centroids[j]);
+                    float distance = distanceMetric(p, this->centroids[j]);
                     if (distance < minDistance) {
                         minDistance = distance;
                         p.clusterLabel = j;

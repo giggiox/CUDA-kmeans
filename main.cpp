@@ -7,14 +7,28 @@
 
 
 
+int mainReportNumThreads(const std::string& dataset,const std::string& centroidsPath,const std::string& s_numthreads){
+    int  numthreads= std::stoi(s_numthreads);
+    std::vector<Point> data = loadDataset(dataset);
+    KMeans kmean(100);
+    std::vector<Centroid> centroids = loadCentroids(centroidsPath);
+    kmean.centroids = centroids;
+    double dt = omp_get_wtime();
+    kmean.fitParallel(data,100,numthreads);
+    dt = omp_get_wtime() - dt;
+    std::cout << dt << std::endl;
+
+    return 0;
+}
+
+
+
+
 int mainReport(const std::string& dataset,const std::string& centroidsPath){
     std::vector<Point> data = loadDataset(dataset);
-    KMeans kmean(5);
+    KMeans kmean(100);
     std::vector<Centroid> centroids = loadCentroids(centroidsPath);
-
     kmean.centroids = centroids;
-
-
     double dt = omp_get_wtime();
     kmean.fit(data,100);
     dt = omp_get_wtime() - dt;
@@ -22,7 +36,7 @@ int mainReport(const std::string& dataset,const std::string& centroidsPath){
 
     kmean.centroids = centroids;
     dt = omp_get_wtime();
-    kmean.fitParallel(data,100);
+    kmean.fitParallel(data,100,4);
     dt = omp_get_wtime() - dt;
     std::cout << dt << std::endl;
 
@@ -30,9 +44,6 @@ int mainReport(const std::string& dataset,const std::string& centroidsPath){
 }
 
 int mainTest(){
-
-    std::cout << omp_get_num_threads() << std::endl;
-
     std::string cwd = "/home/luigi/CLionProjects/kmeans/";
     std::string dataset = "10000_5.csv";
     std::string centroidsPath = "10000_5_centroids.csv";
@@ -57,7 +68,7 @@ int mainTest(){
 
     kmean.centroids = centroids;
     dt = omp_get_wtime();
-    kmean.fitParallel(data,100);
+    kmean.fitParallel(data,100,4);
     dt = omp_get_wtime() - dt;
     std::cout << "time parallel execution: " << dt << std::endl;
 
@@ -80,6 +91,8 @@ int main(int argc, char* argv[]) {
         return mainTest();
     }else if(argc == 3){
         return mainReport(argv[1],argv[2]);
+    }else if(argc == 4) {
+        return mainReportNumThreads(argv[1],argv[2],argv[3]);
     }else{
         std::cerr << "Pass the correct amount of arguments." << std::endl;
         return 1;
