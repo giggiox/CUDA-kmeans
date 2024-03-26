@@ -25,25 +25,25 @@ for i in range(len(samples_test)):
 
 
 
-    proc1 = subprocess.Popen(["./cmake-build-release/ompkmeans", filename, filename_centroids,"2"], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["./build/kmeans", filename, filename_centroids,"2"], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
     times2.append(float(lines[0]))
 
-    proc1 = subprocess.Popen(["./cmake-build-release/ompkmeans", filename, filename_centroids,"4"], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["./build/kmeans", filename, filename_centroids,"4"], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
     times4.append(float(lines[0]))
 
-    proc1 = subprocess.Popen(["./cmake-build-release/ompkmeans", filename, filename_centroids,"8"], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["./build/kmeans", filename, filename_centroids,"8"], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
     times8.append(float(lines[0]))
 
-    proc1 = subprocess.Popen(["./cmake-build-release/ompkmeans", filename, filename_centroids,"32"], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["./build/kmeans", filename, filename_centroids,"32"], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")

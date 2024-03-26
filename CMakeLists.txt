@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.16)
 project(ompkmeans)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
-add_executable(ompkmeans main.cpp
+add_executable(kmeans main.cpp
         KMeans.cpp
         KMeans.h
         point.h

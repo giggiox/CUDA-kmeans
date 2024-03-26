@@ -1,3 +1,0 @@
-/home/luigi/CLionProjects/kmeans/cmake-build-release/CMakeFiles/ompkmeans.dir
-/home/luigi/CLionProjects/kmeans/cmake-build-release/CMakeFiles/edit_cache.dir
-/home/luigi/CLionProjects/kmeans/cmake-build-release/CMakeFiles/rebuild_cache.dir

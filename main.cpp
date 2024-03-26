@@ -10,7 +10,7 @@
 int mainReportNumThreads(const std::string& dataset,const std::string& centroidsPath,const std::string& s_numthreads){
     int  numthreads= std::stoi(s_numthreads);
     std::vector<Point> data = loadDataset(dataset);
-    KMeans kmean(100);
+    KMeans kmean(5);
     std::vector<Centroid> centroids = loadCentroids(centroidsPath);
     kmean.centroids = centroids;
     double dt = omp_get_wtime();
@@ -26,7 +26,7 @@ int mainReportNumThreads(const std::string& dataset,const std::string& centroids
 
 int mainReport(const std::string& dataset,const std::string& centroidsPath){
     std::vector<Point> data = loadDataset(dataset);
-    KMeans kmean(100);
+    KMeans kmean(5);
     std::vector<Centroid> centroids = loadCentroids(centroidsPath);
     kmean.centroids = centroids;
     double dt = omp_get_wtime();

@@ -27,7 +27,7 @@ for i in range(len(samples_test)):
         save_to_csv(c,filename_centroids)
 
         dt_seq = 0
-        proc = subprocess.Popen(["./cmake-build-release/ompkmeans", filename, filename_centroids], stdout=subprocess.PIPE)
+        proc = subprocess.Popen(["./build/kmeans", filename, filename_centroids], stdout=subprocess.PIPE)
 
         output, _ = proc.communicate()
         output_str = output.decode("utf-8")
@@ -37,7 +37,7 @@ for i in range(len(samples_test)):
         par_time += float(lines[1])
 
 
-        proc1 = subprocess.Popen(["./cuda/cuda", filename, filename_centroids], stdout=subprocess.PIPE)
+        proc1 = subprocess.Popen(["./build/cudakmeans", filename, filename_centroids], stdout=subprocess.PIPE)
 
         output, _ = proc1.communicate()
         output_str = output.decode("utf-8")
@@ -108,11 +108,3 @@ ax.xaxis.set_ticklabels(samples_test) # change the ticks' names to x
 plt.xlabel("#points")
 plt.ylabel("speedup")
 plt.show()
-
-
-
-
-
-
-
-
