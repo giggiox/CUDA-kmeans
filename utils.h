@@ -1,19 +1,69 @@
-//
-// Created by luigi on 18/02/24.
-//
+std::vector<std::string> split (const std::string &s, char delim) {
+    std::vector<std::string> result;
+    std::stringstream ss (s);
+    std::string item;
 
-#ifndef OMPKMEANS_UTILS_H
-#define OMPKMEANS_UTILS_H
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include "point.h"
-#include "centroid.h"
+    while (getline (ss, item, delim)) {
+        result.push_back (item);
+    }
 
-std::vector<std::string> split (const std::string &s, char delim);
-void exportCsv(const std::string& fileName, std::vector<Point>& dataPoints);
-std::vector<Point> loadDataset(const std::string& fileName);
-std::vector<Centroid> loadCentroids(const std::string& fileName);
+    return result;
+}
 
-#endif //OMPKMEANS_UTILS_H
+
+int getLineNumber(const std::string& fileName){
+    std::string line;
+    std::ifstream file(fileName);
+    std::string word;
+    if(!file.is_open()){
+        std::cout << "error opening file." << std::endl;
+        return -1;
+    }
+    int lineNumber = 0;
+    while(getline(file,line)){
+        lineNumber += 1;
+    }
+    file.close();
+    return lineNumber;
+}
+
+
+float* loadCsv(const std::string& fileName){
+    std::string line;
+    std::ifstream file(fileName);
+    std::string word;
+    if(!file.is_open()){
+        std::cout << "error opening file." << std::endl;
+        return nullptr;
+    }
+    int lineNumber = 0;
+    while(getline(file,line)){
+        lineNumber += 1;
+    }
+    file.close();
+
+    std::ifstream file1(fileName);
+    float *dataPoints = (float*) malloc(sizeof(float)*lineNumber*3);
+    int i = 0;
+    while(getline(file1,line)){
+        std::vector<std::string> coords = split(line,',');
+        dataPoints[i++] = stof(coords[0]);
+        dataPoints[i++] = stof(coords[1]);
+    }
+    file1.close();
+    return dataPoints;
+}
+
+
+void exportCsv(const std::string& fileName, float * dataPoints, int * clusterLabel,int dataPointsLength){
+    std::ofstream file(fileName);
+    if (!file.is_open()) {
+        std::cerr << "Error opening file." << std::endl;
+        return;
+    }
+    for (int i = 0;i<dataPointsLength;i++) {
+        file << dataPoints[2*i] << "," << dataPoints[2*i+1] << "," << "," << clusterLabel[i] << "\n";
+    }
+    file.close();
+
+}

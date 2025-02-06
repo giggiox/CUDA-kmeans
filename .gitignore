@@ -1,1 +1,7 @@
-__pycache__/
+**/__pycache__/
+
+build/
+
+datasetUtils/generatedDatasets/*
+!datasetUtils/generatedDatasets/1000_5_centroids.csv
+!datasetUtils/generatedDatasets/1000_5.csv

@@ -1,5 +1,9 @@
-from create_dataset import *
+import sys
 import os
+
+sys.path.append(os.path.abspath('../datasetUtils'))
+from create_dataset import *
+
 import subprocess
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,7 +11,7 @@ import numpy as np
 
 
 num_clusters = 1000
-samples_test = [1000,10000,100000,1000000,10000000]
+samples_test = [10000,100000,1000000,10000000]
 
 cuda_times1024 = []
 cuda_times512 = []
@@ -15,33 +19,33 @@ cuda_times256 = []
 cuda_times128 = []
 
 for i in range(len(samples_test)):
-    filename = f"{os.getcwd()}/dataset/{samples_test[i]}_{num_clusters}.csv"
-    filename_centroids = f"{os.getcwd()}/dataset/{samples_test[i]}_{num_clusters}_centroids.csv"
+    filename = f"../datasetUtils/generatedDatasets/{samples_test[i]}_{num_clusters}.csv"
+    filename_centroids = f"../datasetUtils/generatedDatasets/{samples_test[i]}_{num_clusters}_centroids.csv"
 
     x = generate_blob_dataset(samples_test[i], num_clusters)
     save_to_csv(x, filename)
     c = random_centroids(x,num_clusters)
     save_to_csv(c,filename_centroids)
 
-    proc1 = subprocess.Popen(["./build/cuda1024", filename, filename_centroids], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["../build/cuda1024", filename, filename_centroids], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
     cuda_times1024.append(float(lines[0]))
 
-    proc1 = subprocess.Popen(["./build/cuda512", filename, filename_centroids], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["../build/cuda512", filename, filename_centroids], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
     cuda_times512.append(float(lines[0]))
 
-    proc1 = subprocess.Popen(["./build/cuda256", filename, filename_centroids], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["../build/cuda256", filename, filename_centroids], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
     cuda_times256.append(float(lines[0]))
 
-    proc1 = subprocess.Popen(["./build/cuda128", filename, filename_centroids], stdout=subprocess.PIPE)
+    proc1 = subprocess.Popen(["../build/cuda128", filename, filename_centroids], stdout=subprocess.PIPE)
     output, _ = proc1.communicate()
     output_str = output.decode("utf-8")
     lines = output_str.split("\n")
