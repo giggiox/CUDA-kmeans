@@ -10,7 +10,7 @@ import numpy as np
 
 
 
-num_clusters = 5
+num_clusters = 100
 samples_test = [10000,10000,100000,1000000]
 seq_times = []
 cuda_times = []

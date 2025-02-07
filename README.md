@@ -5,7 +5,7 @@ Build code with
 make
 ```
 
-This will generate 3 files inside `build` directory: `kmeansSequential`, `kmeansCuda`, `kmeansParallel` (openmp implementation).
+This will generate 4 files inside `build` directory: `kmeansSequential`, `kmeansCuda`, `kmeansCudaV2` `kmeansParallel` (openmp implementation).
 
 You can try them passing the dataset and starting centroids csv files as an argument:
 Example:

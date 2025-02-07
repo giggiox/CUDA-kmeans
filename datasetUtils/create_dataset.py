@@ -17,10 +17,10 @@ def random_centroids(x,num_clusters):
 
 
 if __name__ == "__main__":
-    num_samples = 10000000
-    num_clusters = 5
+    num_samples = 1_000_000
+    num_clusters = 100
 
     x = generate_blob_dataset(num_samples, num_clusters)
-    save_to_csv(x, f"{os.getcwd()}/dataset/{num_samples}_{num_clusters}.csv")
+    save_to_csv(x, f"{os.getcwd()}/generatedDatasets/{num_samples}_{num_clusters}.csv")
     c = random_centroids(x,num_clusters)
-    save_to_csv(c,f"{os.getcwd()}/dataset/{num_samples}_{num_clusters}_centroids.csv")
+    save_to_csv(c,f"{os.getcwd()}/generatedDatasets/{num_samples}_{num_clusters}_centroids.csv")
