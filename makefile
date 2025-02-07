@@ -15,14 +15,15 @@ ifeq ($(EXPORT_FINAL_RESULT),1)
 endif
 
 BUILD_DIR = build
+SRC_DIR = src
 
 EXECUTABLE_CUDA = $(BUILD_DIR)/kmeansCuda
 EXECUTABLE_SEQ  = $(BUILD_DIR)/kmeansSequential
 EXECUTABLE_PAR  = $(BUILD_DIR)/kmeansParallel
 
-CUDA_SRC     = kmeansCuda.cu
-CXX_SRC      = kmeansSequential.cpp
-CXX_PAR_SRC  = kmeansParallel.cpp
+CUDA_SRC     = $(SRC_DIR)/kmeansCuda.cu
+CXX_SRC      = $(SRC_DIR)/kmeansSequential.cpp
+CXX_PAR_SRC  = $(SRC_DIR)/kmeansParallel.cpp
 
 all: $(EXECUTABLE_CUDA) $(EXECUTABLE_SEQ) $(EXECUTABLE_PAR)
 
