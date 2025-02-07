@@ -1,4 +1,4 @@
-**/__pycache__/
+__pycache__/
 build/
 datasetUtils/generatedDatasets/*
 !datasetUtils/generatedDatasets/1000_5.csv
