@@ -1,5 +1,13 @@
-# Use
+This project implements K-Means clustering using CUDA for parallelization, achieving significant speedup over the sequential version.
 
+🚀 Speedup: Up to 35x faster for large datasets!
+
+![](images/run_test/k100.png)
+
+Read the full write-up [here](https://www.luigicennini.it/en/projects/cuda-kmeans/).
+
+
+# Usage
 Build code with
 ```cpp
 make

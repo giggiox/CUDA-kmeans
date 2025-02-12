@@ -19,4 +19,4 @@ def show_dataset(dataset_path, is_result=False):
 
 if __name__ == "__main__":
     dataset = "sequential_result.csv"
-    show_dataset(f"{os.getcwd()}/result/{dataset}", is_result=True)
+    show_dataset(f"../datasetUtils/result/{dataset}", is_result=True)
