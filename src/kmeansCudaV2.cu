@@ -6,7 +6,10 @@
 #include <chrono>
 #include "utils.h"
 
+#ifndef K
 #define K 5
+#endif
+
 #define THREAD_PER_BLOCK 1024
 
 #define CUDA_CHECK_RETURN(value) CheckCudaErrorAux(__FILE__, __LINE__, #value, value)

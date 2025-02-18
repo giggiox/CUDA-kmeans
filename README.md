@@ -1,8 +1,8 @@
 This project implements K-Means clustering using CUDA for parallelization, achieving significant speedup over the sequential version.
 
-🚀 Speedup: Up to 35x faster for large datasets!
+🚀 Speedup: Up to +100x faster for large datasets!
 
-![](images/run_test/k100.png)
+![](images/run_test/V3/k1000.png)
 
 Read the full write-up [here](https://www.luigicennini.it/en/projects/cuda-kmeans/).
 
@@ -10,10 +10,10 @@ Read the full write-up [here](https://www.luigicennini.it/en/projects/cuda-kmean
 # Usage
 Build code with
 ```cpp
-make
+make K=5
 ```
 
-This will generate 4 files inside `build` directory: `kmeansSequential`, `kmeansCuda`, `kmeansCudaV2` `kmeansParallel` (openmp implementation).
+This will generate 6 files inside `build` directory: `kmeansSequential`, `kmeansCuda`, `kmeansCudaV2`, `kmeansCudaV3`, `kmeansCudaV3` and   `kmeansParallel` (openmp implementation).
 
 You can try them passing the dataset and starting centroids csv files as an argument:
 Example:
@@ -22,8 +22,10 @@ Example:
 ./build/kmeansSequential datasetUtils/generatedDatasets/1000_5.csv datasetUtils/generatedDatasets/1000_5_centroids.csv
 ```
 
-This will display the elapsed time.
 
+The output will be the elapsed time.
+
+*Note: if you don't pass K as an argument to the makefile, it will assume K=5*
 
 ## Display final centroids
 To display final centroids build with `PRINT_FINAL_CENTROIDS` flag enabled:

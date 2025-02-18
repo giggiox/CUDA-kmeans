@@ -29,9 +29,11 @@ __global__ void centroidAssignAndUpdate(float *dataPoints_dev,  float *centroids
     int localIndex = threadIdx.x;
     __shared__ float newCentroids_shared[2*K];
     __shared__ int clusterCardinality_shared[K];
+    __shared__ float centroids_shared[2*K];
 
     for(int i = localIndex; i < 2*K; i += blockDim.x) {
         newCentroids_shared[i] = 0.0;
+        centroids_shared[i] = centroids_dev[i];
         if (i < K) {
             clusterCardinality_shared[i] = 0;
         }
@@ -41,8 +43,8 @@ __global__ void centroidAssignAndUpdate(float *dataPoints_dev,  float *centroids
     float minDistance = INFINITY;
     int clusterLabel = 0;
     for (int j = 0; j < K; ++j) {
-        float distance = distanceMetric(dataPoints_dev[index*2],dataPoints_dev[index*2+1],
-                                        centroids_dev[j*2],centroids_dev[j*2+1]);
+        float distance = distanceMetric(dataPoints_dev[index*2], dataPoints_dev[index*2+1],
+                                        centroids_shared[j*2], centroids_shared[j*2+1]);
         if(distance < minDistance){
             minDistance = distance;
             clusterLabel = j;
@@ -59,6 +61,16 @@ __global__ void centroidAssignAndUpdate(float *dataPoints_dev,  float *centroids
         atomicAdd(&(newCentroids_dev[i*2+1]), newCentroids_shared[i*2+1]);
         atomicAdd(&(clusterCardinality_dev[i]), clusterCardinality_shared[i]);
     }
+}
+
+
+__global__ void updateCentroids(float *centroids_dev, float *newCentroids_dev, int *clusterCardinality_dev){
+    const int i = threadIdx.x + blockIdx.x*blockDim.x;
+    int cc = clusterCardinality_dev[i];
+    if (i >= K || cc <= 0) return;
+    centroids_dev[i*2] = newCentroids_dev[i*2] / cc;
+    centroids_dev[i*2 + 1] = newCentroids_dev[i*2 + 1] / cc;
+
 }
 
 
@@ -98,17 +110,11 @@ int main(int argc, char const *argv[]) {
         CUDA_CHECK_RETURN(cudaMemset(clusterCardinality_dev, 0, K * sizeof(int)));
 
         centroidAssignAndUpdate<<<gridSize, blockSize>>>(dataPoints_dev,centroids_dev,newCentroids_dev,clusterCardinality_dev,clusterLabel_dev,N);
-
-        CUDA_CHECK_RETURN(cudaMemcpy(newCentroids, newCentroids_dev, K*2*sizeof(float), cudaMemcpyDeviceToHost));
-        CUDA_CHECK_RETURN(cudaMemcpy(clusterCardinality, clusterCardinality_dev, K*sizeof(int), cudaMemcpyDeviceToHost));
-        for (int i = 0; i < K; ++i) {
-            int cardinality = clusterCardinality[i];
-            if (cardinality <= 0) continue; 
-            centroids[i*2] = newCentroids[i*2] / cardinality;
-            centroids[i*2+1] = newCentroids[i*2+1] / cardinality;
-        }
-        CUDA_CHECK_RETURN(cudaMemcpy(centroids_dev, centroids, K*2*sizeof(float), cudaMemcpyHostToDevice));
+        CUDA_CHECK_RETURN(cudaDeviceSynchronize());
+        updateCentroids<<<(K+THREAD_PER_BLOCK-1)/THREAD_PER_BLOCK, THREAD_PER_BLOCK>>>(centroids_dev, newCentroids_dev, clusterCardinality_dev);
+        CUDA_CHECK_RETURN(cudaDeviceSynchronize());
     }
+    CUDA_CHECK_RETURN(cudaMemcpy(centroids, centroids_dev, K*2*sizeof(float), cudaMemcpyDeviceToHost));
     CUDA_CHECK_RETURN(cudaMemcpy(clusterLabel, clusterLabel_dev, N*sizeof(int), cudaMemcpyDeviceToHost));
 
     std::chrono::duration<float> wctduration = (std::chrono::system_clock::now() - wcts);
