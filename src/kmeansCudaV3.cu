@@ -23,7 +23,38 @@ __device__ float distanceMetric(float x1, float y1, float x2, float y2){
     return (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1); // Squared euclidean distance
 }
 
-x
+__global__ void centroidAssignAndUpdate(float *dataPoints_dev,  float *centroids_dev, float *newCentroids_dev, int *clusterCardinality_dev,int*clusterLabel_dev, int N){
+    const int index = threadIdx.x + blockIdx.x*blockDim.x;
+    if(index >= N) {return;}
+    int localIndex = threadIdx.x;
+    __shared__ float newCentroids_shared[2*K];
+    __shared__ int clusterCardinality_shared[K];
+    __shared__ float centroids_shared[2*K];
+
+    for(int i = localIndex; i < 2*K; i += blockDim.x) {
+        newCentroids_shared[i] = 0.0;
+        centroids_shared[i] = centroids_dev[i];
+        if (i < K) {
+            clusterCardinality_shared[i] = 0;
+        }
+    }
+
+    __syncthreads();
+    float minDistance = INFINITY;
+    int clusterLabel = 0;
+    for (int j = 0; j < K; ++j) {
+        float distance = distanceMetric(dataPoints_dev[index*2], dataPoints_dev[index*2+1],
+                                        centroids_shared[j*2], centroids_shared[j*2+1]);
+        if(distance < minDistance){
+            minDistance = distance;
+            clusterLabel = j;
+        }
+    }
+    clusterLabel_dev[index] = clusterLabel;
+    atomicAdd(&(newCentroids_shared[clusterLabel*2]), dataPoints_dev[index*2]);
+    atomicAdd(&(newCentroids_shared[clusterLabel*2 + 1]), dataPoints_dev[index*2 + 1]);
+    atomicAdd(&(clusterCardinality_shared[clusterLabel]),1);
+    __syncthreads();
 
     for(int i = localIndex; i < K; i+= blockDim.x) {
         atomicAdd(&(newCentroids_dev[i*2]), newCentroids_shared[i*2]);
