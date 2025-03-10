@@ -4,7 +4,7 @@ This project implements K-Means clustering using CUDA for parallelization, achie
 
 ![](images/run_test/V3/k1000.png)
 
-Read the full write-up [here](https://www.luigicennini.it/en/projects/cuda-kmeans/).
+Read the full write-up [here](https://www.luigicennini.it/projects/cuda-kmeans/).
 
 
 # Usage
